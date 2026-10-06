@@ -1,0 +1,19 @@
+#BiocManager and the Cardinal library are installed. These lines are essential for producing the spectrum 
+if (!requireNamespace("BiocManager", quietly = TRUE)) 
+ install.packages("BiocManager") 
+BiocManager::install("Cardinal") 
+library(Cardinal)
+
+
+
+#The file path (IN .imzML FORM) is stored in the variable "file_path" 
+#Make sure there are no spaces in the name of your file 
+file_path <-  "Name_of_your_file_path.imzML"  
+#The data in the file is read then stored in a variable "ms_data"  
+ms_data <- readMSIData(file_path)  
+#This code segment plots the data  
+plot(ms_data, i= 500)  
+#This code segment draws a line to highlight the targeted  
+abline(v=483, col="blue",lty=2, lwd =2) 
+
+
