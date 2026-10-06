@@ -1,0 +1,62 @@
+#import statements (libraries of existing code)
+
+import pandas as pd 
+import numpy as np  
+import matplotlib.pyplot as plt  
+#global variable that defines file path  
+file_path = "package1.txt"  
+#Procedure that extracts and plots data  
+def plot_location_scan_grid(file_path):  
+  print(f"Reading data from {file_path}...")  
+  
+ #Panda reads data from the file and stores it in the variable "df"   df = pd.read_csv(file_path, sep=',', header=None, skiprows=1)    
+
+ #Data from user-identified rows is extracted from "df" and stored in the     
+ #variable "intensity_data".  
+ #Numbers in the brackets are ranges for rows and columns, respectively.    
+ #Numbers in the brackets may be changed to your preference.   intensity_data = df.iloc[9371:9420, 1:50]  
+  
+ #Data within the row is added and displayed in the 7 x 7 graph
+ total_intensities = intensity_data.sum(axis=0).values  
+ grid_data = total_intensities.reshape((7, 7))  
+ #Creates blank image and defines its dimensions (10in x 8 in)
+#Numbers may be changed to your preference  
+ fig, ax = plt.subplots(figsize=(10, 8))  
+ #Displays data as a heatmap  
+ cax = ax.imshow(grid_data, cmap='viridis')  
+ #Creates and labels a color bar using the min and max from your data 
+ cbar = fig.colorbar(cax)  
+ cbar.set_label('Total Signal Intensity')  
+ #The program loops through the 7 rows and 7columns  
+ for i in range(7):  
+ for j in range(7):  
+
+ #Depending on the color of the square, the text is white or black, ensures    
+ #legibility of code.  
+ text_color = "white" if grid_data[i, j] < grid_data.max() / 2 else "black"
+
+ #Data is extracted and rewritten in scientific notation  
+ ax.text(j, i, f"{grid_data[i, j]:.1e}",  
+       ha="center", va="center", color=text_color, fontsize=10)
+
+ #Places data in specified positions on the x and y axis 
+ ax.set_xticks(np.arange(7)) 
+ ax.set_xticklabels(['1', '2', '3', '4', '5', '6', '7']) 
+  
+ ax.set_yticks(np.arange(7)) 
+ ax.set_yticklabels(['1', '2', '3', '4', '5', '6', '7']) 
+
+ #Labeling the heatmap, the x axis, and the y axis. 
+ plt.title('Intensity of 502-504 m/z by Location and Scan') 
+ plt.xlabel('Scan Number') 
+ plt.ylabel('Location Number') 
+
+ #Controls the margins 
+ plt.tight_layout() 
+  
+ plt.savefig('graph.png') 
+ print("Success! Click on 'graph.png' in your left sidebar to view your graph.")  #Displays the graph 
+ plt.show() 
+#Somewhat like the procedure call. The spark to run the code 
+ if __name__ == "__main__": 
+   plot_location_scan_grid(file_path)
